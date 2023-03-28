@@ -1,6 +1,7 @@
 <?php
 error_reporting(-1);
 require_once 'funcs.php';
+require_once 'connect.php';
 
 if (!empty($_POST)){
     save_mess();
@@ -9,7 +10,6 @@ if (!empty($_POST)){
 }
 
 $messages = get_mess();
-$messages = array_mess($messages);
 //print_arr($messages);
 
 ?>
@@ -47,10 +47,10 @@ $messages = array_mess($messages);
 
 <?php if (!empty($messages)): ?>
     <?php foreach ($messages as $message):?>
-    <?php $message = get_format_message($message); ?>
+
     <div class="messages">
-        <p>Author: <?=$message[0]?>| Date: <?=$message[2]?></p>
-        <div><?=nl2br(htmlspecialchars($message[1]))?></div>
+        <p>Author: <?=$message['name']?>| Date: <?=$message['date']?></p>
+        <div><?=nl2br(htmlspecialchars($message['text']))?></div>
     </div>
     <?php endforeach;?>
 <?php endif;?>

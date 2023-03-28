@@ -1,23 +1,33 @@
 <?php
+function clear(){
+    global $db;
+    foreach ($_POST as $item => $value){
+        $_POST[$item] = mysqli_escape_string($db, $value);
+    }
+}
+
+
 function save_mess(){
-$str = $_POST['name'] .'|'. $_POST['text'] .'|'. date('Y-m-d H:i:s'). "\n***\n";
-file_put_contents('gb.txt', $str, FILE_APPEND);
+    global $db;
+    /*$name = mysqli_escape_string($db, $_POST['name']);
+    $text = mysqli_escape_string($db, $_POST['text']);*/
+    clear();
+    extract($_POST);
+    $query = "INSERT INTO gb (name, text) VALUES ('$name','$text')";
+    mysqli_query($db, $query);
 }
 
 function get_mess(){
-   return file_get_contents('gb.txt');
+    global $db;
+    $query = "SELECT * FROM gb ORDER BY id DESC ";
+    $res = mysqli_query($db,$query);
+    return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
-function array_mess($messages){
-    $messages = explode("\n***\n", $messages);
-    array_pop($messages);
-    return array_reverse($messages);
-}
 
-function get_format_message($message){
-    return explode('|', $message);
-}
 
-function print_arr($arr){
+
+
+/*function print_arr($arr){
     echo '<pre>'. print_r($arr, true).'</pre>';
-}
+}*/
